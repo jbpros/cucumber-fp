@@ -1,3 +1,4 @@
+import * as cucumber from '@cucumber/cucumber'
 import { withContext } from '../src/index'
 
 export type MyContext = { a: number; s?: string }
@@ -13,6 +14,6 @@ When('failure', () => {
   throw new Error('I fail')
 })
 
-// cucumber.After(function (this: FPWorld) {
-//   console.log('\nContext after scenario run:\n', JSON.stringify(this.ctx, null, 2))
-// })
+cucumber.After(function (this: { ctx: MyContext }) {
+  console.log('\nContext after scenario run:\n', JSON.stringify(this.ctx, null, 2))
+})
