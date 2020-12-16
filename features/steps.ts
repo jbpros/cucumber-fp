@@ -1,7 +1,11 @@
 import * as cucumber from '@cucumber/cucumber'
 import { withContext } from '../src/index'
 
-export type MyContext = { a: number; s?: string; n?: number }
+export interface MyContext {
+  a: number
+  s?: string
+  n?: number
+}
 
 const initialCtx: MyContext = { a: 0 }
 
