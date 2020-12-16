@@ -23,12 +23,24 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
   cucumber.setWorldConstructor(FPWorld)
 
   const defineStep = (pattern: string | RegExp, fn: StepDef<C>): void => {
-    const params = new Array(fn.length > 1 ? fn.length - 1 : 0).fill('').map((_, i) => `p${i}`)
+    const params = new Array(fn.length > 1 ? fn.length - 1 : 0)
+      .fill('')
+      .map((_, i) => `p${i}`)
     FPWorld.fns.push(fn)
     const sfn = new Function(
-      ...[...params, `this.ctx = this.fns[${FPWorld.fns.length - 1}](this.ctx, ${params.join(', ')})`]
+      ...[
+        ...params,
+        `this.ctx = this.fns[${FPWorld.fns.length - 1}](this.ctx, ${params.join(
+          ', '
+        )})`,
+      ]
     )
     cucumber.defineStep(pattern, sfn)
   }
-  return { defineStep, Given: defineStep, When: defineStep, Then: defineStep }
+  return {
+    defineStep,
+    Given: defineStep,
+    When: defineStep,
+    Then: defineStep,
+  }
 }

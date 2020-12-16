@@ -15,5 +15,8 @@ When('failure', () => {
 })
 
 cucumber.After(function (this: { ctx: MyContext }) {
-  console.log('\nContext after scenario run:\n', JSON.stringify(this.ctx, null, 2))
+  console.log(
+    '\nContext after scenario run:\n',
+    JSON.stringify(this.ctx, null, 2)
+  )
 })
