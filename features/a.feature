@@ -1,11 +1,11 @@
 Feature: Function step definitions
   Scenario: synchronous steps
-    Given A
-    And A
+    Given a step
+    And a step
     When a step with a "string that contains stuff"
 
   Scenario: asynchronous steps
-    Given a promised step
+    Given an async step
 
   Scenario: failure
     When failure
