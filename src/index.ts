@@ -1,31 +1,34 @@
 import * as cucumber from '@cucumber/cucumber'
 
-export type Context = { a: number; s?: string }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type StepDef<C> = (ctx: C, ...args: any[]) => C
+type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 
-type StepArgs = any[]
+type WithContext<C> = {
+  defineStep: DefineStep<C>
+  Given: DefineStep<C>
+  When: DefineStep<C>
+  Then: DefineStep<C>
+}
 
-const initialCtx = { a: 0 }
-
-export class FPWorld {
-  public ctx: Context = initialCtx
-  public static fns: StepDef[] = []
-  get fns() {
-    return FPWorld.fns
+export const withContext = <C>(initialCtx: C): WithContext<C> => {
+  class FPWorld {
+    public ctx = initialCtx
+    public static fns: StepDef<C>[] = []
+    get fns() {
+      return FPWorld.fns
+    }
   }
+
+  cucumber.setWorldConstructor(FPWorld)
+
+  const defineStep = (pattern: string | RegExp, fn: StepDef<C>): void => {
+    const params = new Array(fn.length > 1 ? fn.length - 1 : 0).fill('').map((_, i) => `p${i}`)
+    FPWorld.fns.push(fn)
+    const sfn = new Function(
+      ...[...params, `this.ctx = this.fns[${FPWorld.fns.length - 1}](this.ctx, ${params.join(', ')})`]
+    )
+    cucumber.defineStep(pattern, sfn)
+  }
+  return { defineStep, Given: defineStep, When: defineStep, Then: defineStep }
 }
-
-type StepDef = (ctx: Context, ...args: StepArgs) => Context
-
-cucumber.setWorldConstructor(FPWorld)
-
-export const defineStep = (pattern: string | RegExp, fn: StepDef): void => {
-  const params = new Array(fn.length > 1 ? fn.length - 1 : 0).fill('').map((_, i) => `p${i}`)
-  FPWorld.fns.push(fn)
-  const sfn = new Function(
-    ...[...params, `this.ctx = this.fns[${FPWorld.fns.length - 1}](this.ctx, ${params.join(', ')})`]
-  )
-  cucumber.defineStep(pattern, sfn)
-}
-export const Given = defineStep
-export const When = defineStep
-export const Then = defineStep
