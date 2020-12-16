@@ -1,7 +1,7 @@
 import * as cucumber from '@cucumber/cucumber'
 import { withContext } from '../src/index'
 
-export type MyContext = { a: number; s?: string }
+export type MyContext = { a: number; s?: string; n?: number }
 
 const initialCtx: MyContext = { a: 0 }
 
@@ -10,6 +10,12 @@ const { Given, When } = withContext(initialCtx)
 Given('a step', (ctx) => ({ ...ctx, a: ctx.a + 1 }))
 
 Given('a step with a {string}', (ctx, s: string) => ({ ...ctx, s }))
+
+Given('a step with {int} {string}', (ctx, n: number, s: string) => ({
+  ...ctx,
+  s,
+  n,
+}))
 
 Given('an async step', async (ctx) => ctx)
 

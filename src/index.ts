@@ -1,7 +1,7 @@
 import * as cucumber from '@cucumber/cucumber'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
+type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 
 type WithContext<C> = {
