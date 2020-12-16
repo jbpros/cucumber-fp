@@ -15,6 +15,7 @@ Given('a step with {int} {string}', (ctx, n: number, s: string) => ({
   ...ctx,
   s,
   n,
+  r: 0, // TODO: can we prevent extra members?
 }))
 
 Given('an async step', async (ctx) => ctx)
