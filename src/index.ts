@@ -1,7 +1,7 @@
 import * as cucumber from '@cucumber/cucumber'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type StepDef<C> = (ctx: C, ...args: any[]) => C
+export type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 
 type WithContext<C> = {
@@ -30,9 +30,9 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
     const sfn = new Function(
       ...[
         ...params,
-        `this.ctx = this.fns[${FPWorld.fns.length - 1}](this.ctx, ${params.join(
-          ', '
-        )})`,
+        `Promise.resolve(this.fns[${
+          FPWorld.fns.length - 1
+        }](this.ctx, ${params.join(', ')})).then(v => { this.ctx = v })`,
       ]
     )
     cucumber.defineStep(pattern, sfn)

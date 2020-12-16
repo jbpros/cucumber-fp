@@ -9,6 +9,7 @@ const { Given, When } = withContext(initialCtx)
 
 Given('A', (ctx) => ({ ...ctx, a: ctx.a + 1 }))
 Given('a step with a {string}', (ctx, s: string) => ({ ...ctx, s }))
+Given('a promised step', async (ctx) => ctx)
 
 When('failure', () => {
   throw new Error('I fail')

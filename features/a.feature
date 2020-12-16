@@ -1,8 +1,11 @@
 Feature: Function step definitions
-  Scenario: A
+  Scenario: synchronous steps
     Given A
     And A
-    And a step with a "string that contains stuff"
+    When a step with a "string that contains stuff"
 
-  Scenario:
+  Scenario: asynchronous steps
+    Given a promised step
+
+  Scenario: failure
     When failure
