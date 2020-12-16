@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "none",
+    "moduleResolution": "node",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+  },
+  "include": ["src/*", "features/*"],
+  // "exclude": [
+  //   "**/node_modules",
+  // ],
+  "compileOnSave": true
+}
