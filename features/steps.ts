@@ -9,7 +9,11 @@ export interface MyContext {
 
 const initialCtx: MyContext = { a: 0 }
 
-const { Given, When } = withContext(initialCtx)
+const {
+  Given,
+  When,
+  withCallbacks: { Given: GivenCb },
+} = withContext(initialCtx)
 
 Given('a step', (ctx) => ({ ...ctx, a: ctx.a + 1 }))
 
@@ -23,6 +27,10 @@ Given('a step with {int} {string}', (ctx, n: number, s: string) => ({
 }))
 
 Given('an async step', async (ctx) => ctx)
+
+GivenCb('a callback', (ctx, cb) => cb(null, { ...ctx, s: 'called back' }))
+
+GivenCb('a failing callback', (ctx, cb) => cb(new Error('I fail')))
 
 When('failure', () => {
   throw new Error('I fail')

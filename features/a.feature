@@ -10,5 +10,11 @@ Feature: Function step definitions
   Scenario: asynchronous steps
     Given an async step
 
+  Scenario: callback step
+    Given a callback
+
   Scenario: failure
     When failure
+
+  Scenario: failing callback step
+    Given a failing callback
