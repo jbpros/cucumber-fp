@@ -30,7 +30,7 @@ Given('an async step', async (ctx) => ctx)
 
 GivenCb('a callback', (ctx, cb) => cb(null, { ...ctx, s: 'called back' }))
 
-GivenCb('a failing callback', (ctx, cb) => cb(new Error('I fail')))
+GivenCb('a failing callback', (_, cb) => cb(new Error('I fail')))
 
 When('failure', () => {
   throw new Error('I fail')
