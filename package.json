@@ -1,6 +1,6 @@
 {
   "name": "cucumber-fp",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Cucumber.js with functional programming-style step definitions",
   "main": "index.js",
   "author": "Julien Biezemans <jb@jbpros.com>",
@@ -28,6 +28,10 @@
     "typescript": "^4.1.3"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.node.json",
     "test": "cucumber-js"
-  }
+  },
+  "files": [
+    "lib/"
+  ]
 }

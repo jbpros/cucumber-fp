@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "forceConsistentCasingInFileNames": true,
     "module": "none",
     "moduleResolution": "node",
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2019",
+
   },
   "include": ["src/*", "features/*", "examples/*"],
   // "exclude": [
