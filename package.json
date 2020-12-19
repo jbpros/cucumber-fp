@@ -7,12 +7,18 @@
   "license": "MIT",
   "devDependencies": {
     "@cucumber/cucumber": "^7.0.0-rc.0",
+    "@cucumber/messages": "^13.2.1",
+    "@types/mkdirp": "^1.0.1",
+    "@types/rimraf": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "hamjest": "^3.7.1",
+    "mkdirp": "^1.0.4",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^9.1.1"
   },
   "dependencies": {

@@ -45,7 +45,7 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
     const sfn = new Function(
       ...[
         ...params,
-        `Promise.resolve(this.fns[${
+        `return Promise.resolve(this.fns[${
           FPWorld.fns.length - 1
         }](this.ctx, ${params.join(', ')})).then(v => { this.ctx = v })`,
       ]
@@ -60,7 +60,7 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
       .fill('')
       .map((_, i) => `p${i}`)
     FPWorld.fnCbs.push(fn)
-    const body = `const cb = (err, ctx) => { this.ctx = ctx; originalCb(err) }
+    const body = `const cb = (err, ctx) => { if (!err) { this.ctx = ctx }; originalCb(err) }
     this.fnCbs[${FPWorld.fnCbs.length - 1}](this.ctx, ${[...params, 'cb'].join(
       ', '
     )})`

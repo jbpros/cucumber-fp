@@ -9,7 +9,7 @@
     "declaration": true,
     "declarationMap": true,
   },
-  "include": ["src/*", "features/*"],
+  "include": ["src/*", "features/*", "examples/*"],
   // "exclude": [
   //   "**/node_modules",
   // ],
