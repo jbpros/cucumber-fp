@@ -1,7 +1,7 @@
 {
-  "name": "fpcuke",
+  "name": "cucumber-fp",
   "version": "1.0.0",
-  "description": "Functional Programming brought to Cucumber.js",
+  "description": "Cucumber.js with functional programming-style step definitions",
   "main": "index.js",
   "author": "Julien Biezemans <jb@jbpros.com>",
   "license": "MIT",
