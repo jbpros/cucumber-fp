@@ -1,4 +1,5 @@
 import * as cucumber from '@cucumber/cucumber'
+import arity = require('util-arity')
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
@@ -38,34 +39,31 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
   cucumber.setWorldConstructor(FPWorld)
 
   const defineStep = (pattern: string | RegExp, fn: StepDef<C>): void => {
-    const params = new Array(fn.length > 1 ? fn.length - 1 : 0)
-      .fill('')
-      .map((_, i) => `p${i}`)
-    FPWorld.fns.push(fn)
-    const sfn = new Function(
-      ...[
-        ...params,
-        `return Promise.resolve(this.fns[${
-          FPWorld.fns.length - 1
-        }](this.ctx, ${params.join(', ')})).then(v => { this.ctx = v })`,
-      ]
+    const argsCount = Math.max(0, fn.length - 1)
+    cucumber.defineStep(
+      pattern,
+      arity(argsCount, async function (this: FPWorld, ...args: any[]) {
+        this.ctx = await fn.call(this, this.ctx, ...args)
+      })
     )
-    cucumber.defineStep(pattern, sfn)
   }
 
   const defineStepCb = (pattern: string | RegExp, fn: StepDefCb<C>): void => {
-    if (fn.length === 0)
+    if (fn.length < 1)
       throw new Error('Your step definition is missing a callback')
-    const params = new Array(fn.length === 1 ? 0 : fn.length - 2)
-      .fill('')
-      .map((_, i) => `p${i}`)
-    FPWorld.fnCbs.push(fn)
-    const body = `const cb = (err, ctx) => { if (!err) { this.ctx = ctx }; originalCb(err) }
-    this.fnCbs[${FPWorld.fnCbs.length - 1}](this.ctx, ${[...params, 'cb'].join(
-      ', '
-    )})`
-    const sfn = new Function(...[...params, 'originalCb', body])
-    cucumber.defineStep(pattern, sfn)
+
+    const argsCount = Math.max(0, fn.length - 1)
+    cucumber.defineStep(
+      pattern,
+      arity(argsCount, function (this: FPWorld, ...args: any[]) {
+        const cb = args.pop()
+        fn.call(this, this.ctx, ...args, (err: Error, ctx: C) => {
+          if (err) return cb(err)
+          this.ctx = ctx
+          cb()
+        })
+      })
+    )
   }
 
   return {

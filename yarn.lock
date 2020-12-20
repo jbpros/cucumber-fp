@@ -76,14 +76,6 @@
     util-arity "^1.1.0"
     verror "^1.10.0"
 
-"@cucumber/gherkin-utils@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@cucumber/gherkin-utils/-/gherkin-utils-2.1.1.tgz#5aa4f8983adc4f97c78d363b0e3c6cda975221b2"
-  integrity sha512-3wSvFMi6i8lCxNIOM+WMWh/kvnUCEc1S7e0qUlEV7SaW/I4HqXwAodcZjoP6LBkwbPRpK+xEzqitsVLq0x88jQ==
-  dependencies:
-    "@cucumber/messages" "^13.2.1"
-    "@teppeis/multimaps" "^1.1.0"
-
 "@cucumber/gherkin@^15.0.0", "@cucumber/gherkin@^15.0.2":
   version "15.0.2"
   resolved "https://registry.yarnpkg.com/@cucumber/gherkin/-/gherkin-15.0.2.tgz#43572df618fdeb9136e16412e4d3025e1a184115"
