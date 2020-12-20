@@ -1,5 +1,7 @@
 # Cucumber.js FP step definitions
 
+[![build](https://github.com/jbpros/cucumber-fp/workflows/build/badge.svg)](https://github.com/jbpros/cucumber-fp/actions?query=workflow%3Abuild)
+
 This little library brings functional programming style step definitions to Cucumber.js.
 
 ## Install
