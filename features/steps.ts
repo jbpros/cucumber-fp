@@ -42,7 +42,7 @@ Given('the following step definitions:', (stepDefinitions: string) =>
     'steps.ts',
     `import { writeFileSync } from 'fs'\n\
     import { After } from '@cucumber/cucumber'\n\
-    import { withContext } from '../../src'\n\n${stepDefinitions}\n\
+    import { withContext } from '../../lib'\n\n${stepDefinitions}\n\
     After(function (this: any) {\
       writeFileSync('${tmpDir}/context', JSON.stringify(this.ctx, null, 2))\
     })`

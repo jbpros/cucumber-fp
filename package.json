@@ -29,6 +29,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.node.json",
+    "pretest": "yarn build",
     "test": "cucumber-js"
   },
   "files": [
