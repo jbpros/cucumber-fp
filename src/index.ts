@@ -1,4 +1,7 @@
-import * as cucumber from '@cucumber/cucumber'
+import {
+  defineStep as cucumberDefineStep,
+  setWorldConstructor,
+} from '@cucumber/cucumber'
 import arity = require('util-arity')
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,11 +41,11 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
     public static fnCbs: StepDefCb<C>[] = []
   }
 
-  cucumber.setWorldConstructor(FPWorld)
+  setWorldConstructor(FPWorld)
 
   const defineStep = (pattern: string | RegExp, fn: StepDef<C>): void => {
     const argsCount = Math.max(0, fn.length - 1)
-    cucumber.defineStep(
+    cucumberDefineStep(
       pattern,
       arity(argsCount, async function (this: FPWorld, ...args: unknown[]) {
         this.ctx = await fn.call(this, this.ctx, ...args)
@@ -55,7 +58,7 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
       throw new Error('Your step definition is missing a callback')
 
     const argsCount = Math.max(0, fn.length - 1)
-    cucumber.defineStep(
+    cucumberDefineStep(
       pattern,
       arity(argsCount, function (this: FPWorld, ...args: unknown[]) {
         const cb = args.pop() as (err?: Error) => void
