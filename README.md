@@ -6,6 +6,10 @@ This little library brings functional programming style step definitions to Cucu
 
     npm install --save-dev cucumber-fp
 
+Install Cucumber.js if you haven't done so already:
+
+    npm install --save-dev @cucumber/cucumber
+
 ## Usage
 
 Instead of using the regular step definition functions from Cucumber, call `withContext` to initialise a context and get FP-aware functions:
