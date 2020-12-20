@@ -32,7 +32,7 @@
     "build": "tsc -p tsconfig.node.json",
     "build:watch": "tsc -p tsconfig.node.json --watch",
     "lint": "eslint \"src/**/*.ts\"",
-    "pretest": "yarn build",
+    "pretest": "npm run build",
     "test": "cucumber-js"
   },
   "files": [
