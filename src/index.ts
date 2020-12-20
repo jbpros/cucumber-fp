@@ -8,7 +8,9 @@ type ParamsAndCb<C> = [...x: any, cb: Callback<C>]
 type StepDefCb<C> = (ctx: C, ...args: ParamsAndCb<C>) => void
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 type DefineStepCb<C> = (pattern: string | RegExp, fn: StepDefCb<C>) => void
-type Callback<C> = (error: Error | undefined, ctx: C) => void
+type Callback<C> =
+  | ((error: Error) => void)
+  | ((error: undefined, ctx: C) => void)
 
 type WithContext<C> = {
   defineStep: DefineStep<C>
@@ -42,7 +44,7 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
     const argsCount = Math.max(0, fn.length - 1)
     cucumber.defineStep(
       pattern,
-      arity(argsCount, async function (this: FPWorld, ...args: any[]) {
+      arity(argsCount, async function (this: FPWorld, ...args: unknown[]) {
         this.ctx = await fn.call(this, this.ctx, ...args)
       })
     )
@@ -55,8 +57,8 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
     const argsCount = Math.max(0, fn.length - 1)
     cucumber.defineStep(
       pattern,
-      arity(argsCount, function (this: FPWorld, ...args: any[]) {
-        const cb = args.pop()
+      arity(argsCount, function (this: FPWorld, ...args: unknown[]) {
+        const cb = args.pop() as (err?: Error) => void
         fn.call(this, this.ctx, ...args, (err: Error, ctx: C) => {
           if (err) return cb(err)
           this.ctx = ctx
