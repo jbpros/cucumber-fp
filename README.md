@@ -32,8 +32,8 @@ Promises are supported:
 
 ```typescript
 Given('a step', async (ctx) => {
-    await someAsyncFunction(ctx.someState)
-    return { ...ctx, a: 1 }
+  await someAsyncFunction(ctx.someState)
+  return { ...ctx, a: 1 }
 })
 ```
 
