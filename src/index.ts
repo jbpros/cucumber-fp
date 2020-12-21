@@ -26,7 +26,13 @@ type WithContext<C> = {
     When: DefineStepCb<C>
     Then: DefineStepCb<C>
   }
+  tap: Tap<C>
 }
+
+// TODO: specify C type in args, get ride of any?
+type Tap<C> = <A extends any[]>(
+  fn: (...args: A) => unknown
+) => (...args: A) => C
 
 export const withContext = <C>(initialCtx: C): WithContext<C> => {
   class FPWorld {
@@ -42,6 +48,13 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
   }
 
   setWorldConstructor(FPWorld)
+
+  // TODO: use Tap type
+  const tap = (fn: (...args: any[]) => any) =>
+    arity(fn.length, async (ctx: any, ...args: any[]) => {
+      await fn(ctx, ...args)
+      return ctx
+    })
 
   const defineStep = (pattern: string | RegExp, fn: StepDef<C>): void => {
     const argsCount = Math.max(0, fn.length - 1)
@@ -82,5 +95,6 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
       When: defineStepCb,
       Then: defineStepCb,
     },
+    tap,
   }
 }

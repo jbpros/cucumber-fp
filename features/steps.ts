@@ -40,9 +40,11 @@ Given('a scenario with the following steps:', (stepSource: string) =>
 Given('the following step definitions:', (stepDefinitions: string) =>
   writeFile(
     'steps.ts',
-    `import { writeFileSync } from 'fs'\n\
+    `import { appendFileSync, writeFileSync } from 'fs'\n\
     import { After } from '@cucumber/cucumber'\n\
-    import { withContext } from '../../lib'\n\n${stepDefinitions}\n\
+    import { withContext } from '../../lib'\n
+    const log = (data: string) => appendFileSync('${tmpDir}/logs', \`\${data}\\n\`)\n\n
+    ${stepDefinitions}\n\
     After(function (this: any) {\
       writeFileSync('${tmpDir}/context', JSON.stringify(this.ctx, null, 2))\
     })`
@@ -105,6 +107,10 @@ Then('the context should equal:', function (context: string) {
     JSON.parse(readFileSync(join(tmpDir, 'context')).toString()),
     equalTo(JSON.parse(context))
   )
+})
+
+Then('the logs should be:', function (logs: string) {
+  assertThat(readFileSync(join(tmpDir, 'logs')).toString(), equalTo(logs))
 })
 
 const prettyEnvelopes = (envelopes: messages.Envelope[]) =>
