@@ -4,11 +4,10 @@ import {
 } from '@cucumber/cucumber'
 import arity = require('util-arity')
 
-// TODO: can we get rid of those any types everywhere?
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ParamsAndCb<C> = [...x: any, cb: Callback<C>]
+type StepDefParam = any
+type StepDef<C> = (ctx: C, ...args: StepDefParam[]) => C | Promise<C>
+type ParamsAndCb<C> = [...args: StepDefParam, cb: Callback<C>]
 type StepDefCb<C> = (ctx: C, ...args: ParamsAndCb<C>) => void
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 type DefineStepCb<C> = (pattern: string | RegExp, fn: StepDefCb<C>) => void
@@ -31,8 +30,8 @@ type WithContext<C> = {
 }
 
 type Tap<C> = (
-  fn: (ctx: C, ...args: any[]) => unknown
-) => (ctx: C, ...args: any[]) => C
+  fn: (ctx: C, ...args: StepDefParam[]) => unknown
+) => (ctx: C, ...args: StepDefParam[]) => C
 
 export const withContext = <C>(initialCtx: C): WithContext<C> => {
   class FPWorld {
@@ -49,8 +48,8 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
 
   setWorldConstructor(FPWorld)
 
-  const tap: Tap<C> = (fn: (ctx: C, ...args: any[]) => any) =>
-    arity(fn.length, async (ctx: C, ...args: any[]) => {
+  const tap: Tap<C> = (fn: (ctx: C, ...args: StepDefParam[]) => unknown) =>
+    arity(fn.length, async (ctx: C, ...args: StepDefParam[]) => {
       await fn(ctx, ...args)
       return ctx
     })
