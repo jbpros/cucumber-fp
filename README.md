@@ -52,7 +52,7 @@ Often, step definitions do not make any changes to the context. That's especiall
 ```typescript
 import { withContext } from 'cucumber-fp'
 
-const { Given, tap } = withContext({ a: 0 })
+const { Then, tap } = withContext({ a: 0 })
 
 Then('c should exist', tap((ctx) => assert(ctx.c)))
 Then('d should equal {int}', tap((ctx, expected) => assert.equal(ctx.d, expected)))
