@@ -6,9 +6,9 @@ import arity = require('util-arity')
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StepDefParam = any
-type StepDef<C> = (ctx: C, ...args: StepDefParam[]) => C | Promise<C>
+type StepDef<C> = (ctx: Readonly<C>, ...args: StepDefParam[]) => C | Promise<C>
 type ParamsAndCb<C> = [...args: StepDefParam, cb: Callback<C>]
-type StepDefCb<C> = (ctx: C, ...args: ParamsAndCb<C>) => void
+type StepDefCb<C> = (ctx: Readonly<C>, ...args: ParamsAndCb<C>) => void
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 type DefineStepCb<C> = (pattern: string | RegExp, fn: StepDefCb<C>) => void
 type Callback<C> =
@@ -30,8 +30,8 @@ type WithContext<C> = {
 }
 
 type Tap<C> = (
-  fn: (ctx: C, ...args: StepDefParam[]) => unknown
-) => (ctx: C, ...args: StepDefParam[]) => C
+  fn: (ctx: Readonly<C>, ...args: StepDefParam[]) => unknown
+) => (ctx: Readonly<C>, ...args: StepDefParam[]) => C
 
 export const withContext = <C>(initialCtx: C): WithContext<C> => {
   class FPWorld {

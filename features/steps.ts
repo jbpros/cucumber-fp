@@ -8,7 +8,7 @@ import {
 import { messages } from '@cucumber/messages'
 import { spawnSync } from 'child_process'
 import { readFileSync, writeFileSync } from 'fs'
-import { assertThat, equalTo } from 'hamjest'
+import { assertThat, containsString, equalTo } from 'hamjest'
 import * as mkdirp from 'mkdirp'
 import { join } from 'path'
 import * as rimraf from 'rimraf'
@@ -112,6 +112,14 @@ Then('the context should equal:', function (context: string) {
 Then('the logs should be:', function (logs: string) {
   assertThat(readFileSync(join(tmpDir, 'logs')).toString(), equalTo(logs))
 })
+
+Then(
+  'compilation should fail with {string}',
+  function (this: FPWorld, error: string) {
+    assertThat(this.stderr, containsString('Unable to compile TypeScript:'))
+    assertThat(this.stderr, containsString(error))
+  }
+)
 
 const getStepStatuses = (envelopes: messages.Envelope[]) =>
   envelopes.reduce(
