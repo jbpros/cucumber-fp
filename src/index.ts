@@ -4,6 +4,7 @@ import {
 } from '@cucumber/cucumber'
 import arity = require('util-arity')
 
+// TODO: can we get rid of those any types everywhere?
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StepDef<C> = (ctx: C, ...args: any[]) => C | Promise<C>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,10 +30,9 @@ type WithContext<C> = {
   tap: Tap<C>
 }
 
-// TODO: specify C type in args, get ride of any?
-type Tap<C> = <A extends any[]>(
-  fn: (...args: A) => unknown
-) => (...args: A) => C
+type Tap<C> = (
+  fn: (ctx: C, ...args: any[]) => unknown
+) => (ctx: C, ...args: any[]) => C
 
 export const withContext = <C>(initialCtx: C): WithContext<C> => {
   class FPWorld {
@@ -49,9 +49,8 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
 
   setWorldConstructor(FPWorld)
 
-  // TODO: use Tap type
-  const tap = (fn: (...args: any[]) => any) =>
-    arity(fn.length, async (ctx: any, ...args: any[]) => {
+  const tap: Tap<C> = (fn: (ctx: C, ...args: any[]) => any) =>
+    arity(fn.length, async (ctx: C, ...args: any[]) => {
       await fn(ctx, ...args)
       return ctx
     })
