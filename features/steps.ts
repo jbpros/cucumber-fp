@@ -113,9 +113,6 @@ Then('the logs should be:', function (logs: string) {
   assertThat(readFileSync(join(tmpDir, 'logs')).toString(), equalTo(logs))
 })
 
-const prettyEnvelopes = (envelopes: messages.Envelope[]) =>
-  envelopes.map((e) => JSON.stringify(e, null, 2)).join('\n')
-
 const getStepStatuses = (envelopes: messages.Envelope[]) =>
   envelopes.reduce(
     (statuses, envelope) =>
