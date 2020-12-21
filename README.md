@@ -40,7 +40,22 @@ Given('a step', async (ctx) => {
 And old-school callbacks are also supported:
 
 ```typescript
-const { withCallbacks: { Given, When, Then, defineStep } } = withContext({ a: 0 })
+const { withCallbacks: { Given, When, Then } } = withContext({ a: 0 })
 
 Given('some step', (ctx, cb) => cb(null, { ...ctx, d: 9 }))
 ```
+
+### Steps that don't change context
+
+Often, step definitions do not make any changes to the context. That's especially true for `Then` steps that usually only contain assertions. In such cases, you can use the `tap` function to avoid returning the original context:
+
+```typescript
+import { withContext } from 'cucumber-fp'
+
+const { Given, tap } = withContext({ a: 0 })
+
+Then('c should exist', tap((ctx) => assert(ctx.c)))
+Then('d should equal {int}', tap((ctx, expected) => assert.equal(ctx.d, expected)))
+```
+
+_Note_: `tap()` does **not** work with callbacks.
