@@ -48,8 +48,6 @@ Given('some step', (ctx, cb) => cb(null, { ...ctx, d: 9 }))
 ### Mutations of context are forbidden
 
 ```typescript
-import { withContext } from 'cucumber-fp'
-
 interface MyContext { a: string[] }
 const initialContext: MyContext = { a: ['a', 'b'] }
 const { When } = withContext(initialContext)
@@ -73,12 +71,19 @@ Theses constraints have no effects if you're not writing your step definitions i
 Often, step definitions do not make any changes to the context. That's especially true for `Then` steps that usually only contain assertions. In such cases, you can use the `tap` function to avoid returning the original context:
 
 ```typescript
-import { withContext } from 'cucumber-fp'
-
 const { Then, tap } = withContext({ a: 0 })
 
 Then('c should exist', tap((ctx) => assert(ctx.c)))
 Then('d should equal {int}', tap((ctx, expected) => assert.equal(ctx.d, expected)))
 ```
 
-_Note_: `tap()` does **not** work with callbacks.
+When working with callbacks, `tap()` is not needed, you can simply omit the context when calling back:
+
+```typescript
+const { withCallbacks: { Then } } = withContext({ a: 0 })
+
+Then('c should exist', (ctx, cb) => {
+  assert(ctx.c)
+  cb()
+})
+```

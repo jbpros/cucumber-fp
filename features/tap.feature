@@ -85,3 +85,31 @@ Feature: tap function
       second step
 
       """
+
+  Scenario: tap equivalent on callbacks
+    Given a scenario with the following steps:
+      """
+      Given a callback step
+      """
+    And the following step definitions:
+      """
+      const { withCallbacks: { Given } } = withContext({ a: 'initial' })
+      Given(
+        'a callback step',
+        (ctx, cb) => {
+          log('tapped into the step, no returned context')
+          cb()
+        }
+      )
+      """
+    When fp-Cucumber is run
+    Then the step should pass
+    And the context should equal:
+      """
+      { "a": "initial" }
+      """
+    And the logs should be:
+      """
+      tapped into the step, no returned context
+
+      """

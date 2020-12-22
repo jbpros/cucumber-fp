@@ -54,3 +54,19 @@ Feature: Returned context type checks
     When fp-Cucumber is run
     Then compilation should fail with "Object literal may only specify known properties, and 'b' does not exist in type 'MyContext'."
 
+  Scenario: Type checks with callbacks
+    Given a scenario with the following steps:
+      """
+      Given a step
+      """
+    And the following step definitions:
+      """
+      interface MyContext { a: number }
+      const initialContext: MyContext = { a: 0 }
+      const { withCallbacks: { Given } } = withContext(initialContext)
+      Given('a step', (ctx, cb) => {
+        cb(undefined, { ...ctx, b: 3 })
+      })
+      """
+    When fp-Cucumber is run
+    Then compilation should fail with "Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: number; }'."

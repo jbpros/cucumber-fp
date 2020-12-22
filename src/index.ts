@@ -11,13 +11,15 @@ type StepDef<C> = (
   ctx: DeepReadonly<C>,
   ...args: StepDefParam[]
 ) => DeepReadonly<C> | Promise<DeepReadonly<C>>
-type ParamsAndCb<C> = [...args: StepDefParam, cb: Callback<C>]
+type ParamsAndCb<C> = [cb: Callback<C>]
 type StepDefCb<C> = (ctx: DeepReadonly<C>, ...args: ParamsAndCb<C>) => void
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 type DefineStepCb<C> = (pattern: string | RegExp, fn: StepDefCb<C>) => void
-type Callback<C> =
-  | ((error: Error) => void)
-  | ((error: undefined, ctx: C) => void)
+
+type Callback<C> = (
+  error?: Error | undefined | null,
+  ctx?: DeepReadonly<C>
+) => void
 
 type WithContext<C> = {
   defineStep: DefineStep<C>
@@ -79,9 +81,9 @@ export const withContext = <C>(initialCtx: DeepReadonly<C>): WithContext<C> => {
       pattern,
       arity(argsCount, function (this: FPWorld, ...args: unknown[]) {
         const cb = args.pop() as (err?: Error) => void
-        fn(this.ctx, ...args, (err: Error, ctx: DeepReadonly<C>) => {
+        fn(this.ctx, (err, ctx) => {
           if (err) return cb(err)
-          this.ctx = ctx
+          if (ctx) this.ctx = ctx
           cb()
         })
       })

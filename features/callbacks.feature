@@ -6,7 +6,9 @@ Feature: Callbacks
       """
     And the following step definitions:
       """
-      const { withCallbacks: { Given } } = withContext({ a: 0 })
+      interface MyContext { a: number, s?: string }
+      const initialState: MyContext = { a: 0 }
+      const { withCallbacks: { Given } } = withContext(initialState)
       Given('a callback', (ctx, cb) => cb(null, { ...ctx, s: 'called back' }))
       """
     When fp-Cucumber is run
