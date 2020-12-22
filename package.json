@@ -3,7 +3,23 @@
   "version": "0.0.4",
   "description": "Cucumber.js with functional programming-style step definitions",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "Julien Biezemans <jb@jbpros.com>",
+  "homepage": "https://github.com/jbpros/cucumber-fp",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jbpros/cucumber-fp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jbpros/cucumber-fp/issues"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": ["lib/"],
+  "engines": {
+    "node": ">=8"
+  },
   "license": "MIT",
   "devDependencies": {
     "@cucumber/cucumber": "^7.0.0",
@@ -35,8 +51,5 @@
     "lint": "eslint \"src/**/*.ts\"",
     "pretest": "npm run build",
     "test": "cucumber-js"
-  },
-  "files": [
-    "lib/"
-  ]
+  }
 }
