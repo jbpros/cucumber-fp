@@ -2,6 +2,17 @@
   "name": "cucumber-fp",
   "version": "0.0.5",
   "description": "Cucumber.js with functional programming-style step definitions",
+  "keywords": [
+    "testing",
+    "bdd",
+    "cucumber",
+    "gherkin",
+    "tests",
+    "functional",
+    "functional programming",
+    "steps",
+    "step definitions"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "Julien Biezemans <jb@jbpros.com>",
