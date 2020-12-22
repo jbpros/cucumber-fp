@@ -2,7 +2,7 @@
 
 [![build](https://github.com/jbpros/cucumber-fp/workflows/build/badge.svg)](https://github.com/jbpros/cucumber-fp/actions?query=workflow%3Abuild)
 
-This little library brings functional programming style step definitions to Cucumber.js.
+This little library brings functional programming style step definitions to Cucumber.js. We highly recommend using it with TypeScript as it enforces read-only constraints on the context and all its nested members in your functional step definitions.
 
 ## Install
 
@@ -44,6 +44,29 @@ const { withCallbacks: { Given, When, Then } } = withContext({ a: 0 })
 
 Given('some step', (ctx, cb) => cb(null, { ...ctx, d: 9 }))
 ```
+
+### Mutations of context are forbidden
+
+```typescript
+import { withContext } from 'cucumber-fp'
+
+interface MyContext { a: string[] }
+const initialContext: MyContext = { a: ['a', 'b'] }
+const { When } = withContext(initialContext)
+
+When('a step', (ctx) => {
+  ctx.a.push('c')
+  //    ^--- TypeScript compiler will fail here,
+  //         `ctx` is deeply read-only. The following
+  //          would work instead:
+  ctx = { ...ctx, a: [...ctx.a, 'c']}
+  return ctx
+})
+```
+
+The type of `ctx` passed to your step definitions is always [`DeepReadonly<C>`](https://github.com/krzkaczor/ts-essentials#Deep-wrapper-types) (where `C` is the type of your context, in the example above, `MyContext`). That means all mutation operations are forbidden.
+
+Theses constraints have no effects if you're not writing your step definitions in TypeScript, which we highly recommend.
 
 ### Steps that don't change context
 
