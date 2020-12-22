@@ -65,7 +65,7 @@ export const withContext = <C>(initialCtx: DeepReadonly<C>): WithContext<C> => {
     cucumberDefineStep(
       pattern,
       arity(argsCount, async function (this: FPWorld, ...args: unknown[]) {
-        this.ctx = await fn.call(this, this.ctx, ...args)
+        this.ctx = await fn(this.ctx, ...args)
       })
     )
   }
@@ -79,7 +79,7 @@ export const withContext = <C>(initialCtx: DeepReadonly<C>): WithContext<C> => {
       pattern,
       arity(argsCount, function (this: FPWorld, ...args: unknown[]) {
         const cb = args.pop() as (err?: Error) => void
-        fn.call(this, this.ctx, ...args, (err: Error, ctx: DeepReadonly<C>) => {
+        fn(this.ctx, ...args, (err: Error, ctx: DeepReadonly<C>) => {
           if (err) return cb(err)
           this.ctx = ctx
           cb()
