@@ -9,7 +9,9 @@ Feature: Synchronous steps
       """
     And the following step definitions:
       """
-      const { Given, When, Then, defineStep } = withContext({ a: 0 })
+      interface MyContext { a: number }
+      const initialContext: MyContext = { a: 0 }
+      const { Given, When, Then, defineStep } = withContext(initialContext)
       Given('a step', (ctx) => ({ ...ctx, a: 1 }))
       When('another step', (ctx) => ({ ...ctx, b: 2 }))
       Then('a third step', (ctx) => ({ ...ctx, c: 3 }))
