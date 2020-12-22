@@ -1,6 +1,6 @@
 {
   "name": "cucumber-fp",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Cucumber.js with functional programming-style step definitions",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,7 +16,9 @@
   "directories": {
     "lib": "lib"
   },
-  "files": ["lib/"],
+  "files": [
+    "lib/"
+  ],
   "engines": {
     "node": ">=8"
   },
