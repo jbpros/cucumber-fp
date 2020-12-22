@@ -25,6 +25,7 @@
     "@cucumber/cucumber": "^7.0.0"
   },
   "dependencies": {
+    "ts-essentials": "^7.0.1",
     "typescript": "^4.1.3",
     "util-arity": "^1.1.0"
   },

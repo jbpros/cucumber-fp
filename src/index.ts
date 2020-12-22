@@ -3,12 +3,16 @@ import {
   setWorldConstructor,
 } from '@cucumber/cucumber'
 import arity = require('util-arity')
+import { DeepReadonly } from 'ts-essentials'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StepDefParam = any
-type StepDef<C> = (ctx: Readonly<C>, ...args: StepDefParam[]) => C | Promise<C>
+type StepDef<C> = (
+  ctx: DeepReadonly<C>,
+  ...args: StepDefParam[]
+) => DeepReadonly<C> | Promise<DeepReadonly<C>>
 type ParamsAndCb<C> = [...args: StepDefParam, cb: Callback<C>]
-type StepDefCb<C> = (ctx: Readonly<C>, ...args: ParamsAndCb<C>) => void
+type StepDefCb<C> = (ctx: DeepReadonly<C>, ...args: ParamsAndCb<C>) => void
 type DefineStep<C> = (pattern: string | RegExp, fn: StepDef<C>) => void
 type DefineStepCb<C> = (pattern: string | RegExp, fn: StepDefCb<C>) => void
 type Callback<C> =
@@ -30,10 +34,10 @@ type WithContext<C> = {
 }
 
 type Tap<C> = (
-  fn: (ctx: Readonly<C>, ...args: StepDefParam[]) => unknown
-) => (ctx: Readonly<C>, ...args: StepDefParam[]) => C
+  fn: (ctx: DeepReadonly<C>, ...args: StepDefParam[]) => unknown
+) => (ctx: DeepReadonly<C>, ...args: StepDefParam[]) => C
 
-export const withContext = <C>(initialCtx: C): WithContext<C> => {
+export const withContext = <C>(initialCtx: DeepReadonly<C>): WithContext<C> => {
   class FPWorld {
     public ctx = initialCtx
     get fns() {
@@ -48,8 +52,10 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
 
   setWorldConstructor(FPWorld)
 
-  const tap: Tap<C> = (fn: (ctx: C, ...args: StepDefParam[]) => unknown) =>
-    arity(fn.length, async (ctx: C, ...args: StepDefParam[]) => {
+  const tap: Tap<C> = (
+    fn: (ctx: DeepReadonly<C>, ...args: StepDefParam[]) => unknown
+  ) =>
+    arity(fn.length, async (ctx: DeepReadonly<C>, ...args: StepDefParam[]) => {
       await fn(ctx, ...args)
       return ctx
     })
@@ -73,7 +79,7 @@ export const withContext = <C>(initialCtx: C): WithContext<C> => {
       pattern,
       arity(argsCount, function (this: FPWorld, ...args: unknown[]) {
         const cb = args.pop() as (err?: Error) => void
-        fn.call(this, this.ctx, ...args, (err: Error, ctx: C) => {
+        fn.call(this, this.ctx, ...args, (err: Error, ctx: DeepReadonly<C>) => {
           if (err) return cb(err)
           this.ctx = ctx
           cb()
