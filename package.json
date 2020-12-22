@@ -1,6 +1,6 @@
 {
   "name": "cucumber-fp",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Cucumber.js with functional programming-style step definitions",
   "main": "lib/index.js",
   "author": "Julien Biezemans <jb@jbpros.com>",
