@@ -1,6 +1,6 @@
 {
   "name": "cucumber-fp",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Cucumber.js with functional programming-style step definitions",
   "keywords": [
     "testing",
