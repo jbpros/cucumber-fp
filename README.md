@@ -74,7 +74,10 @@ Often, step definitions do not make any changes to the context. That's especiall
 const { Then, tap } = withContext({ a: 0 })
 
 Then('c should exist', tap((ctx) => assert(ctx.c)))
-Then('d should equal {int}', tap((ctx, expected) => assert.equal(ctx.d, expected)))
+Then(
+  'd should equal {int}',
+  tap((ctx, expected) => assert.equal(ctx.d, expected))
+)
 ```
 
 When working with callbacks, `tap()` is not needed, you can simply omit the context when calling back:
