@@ -61,7 +61,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.node.json",
     "build:watch": "tsc -p tsconfig.node.json --watch",
-    "lint": "eslint \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" \"features/**/*.ts\"",
     "pretest": "npm run build",
     "test": "cucumber-js"
   }
